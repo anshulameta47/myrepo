@@ -1,0 +1,124 @@
+
+
+15.Write a query which will display the student id, student names who are enrolled for the course code 200?
+answer:
+select students.studentid,students.studentname from students where students.batchcode in(select batches.batchcode from batches where batches.coursecode=200);
+
+
+
+14.Write a Query which displays the student ID, Student name, Batch code, place and phone number 
+of the student's who took training from CHENNAI in the year 2012.
+answer:
+select * from students where students.place="CHENNAI" and students.batchcode in(select batches.batchcode from batches where batches.startdate like '2012%');
+
+
+13.Write a query which displays the names of all the modules of the course titled 'Oracle DBA'
+answer:
+select MODULES.modulename from MODULES where MODULES.modulecode in(select courseandmodules.modulecode from courseandmodules where courseandmodules.coursecode in(select courses.coursecode from courses where courses.title='Oracle DBA'));
+
+
+12.Write a query to display courses code, course title, course fees of the courses for which 
+no batches/training has been planned in the month of January and year 2012.
+answer:
+ select * from courses where courses.coursecode in(select DISTINCT batches.coursecode from batches where batches.startdate not like '2012-01%');
+ 
+ 
+11.Write a query to display the batch code, course title, start date of the batches for the month of May and year 2012.
+answer:
+select batches.batchcode,batches.startdate,courses.title from batches join courses on batches.coursecode=courses.coursecode where batches.startdate  like '2012-05%';
+
+
+
+10.Write a query which displays the total number of modules which has less than 6 days duration. 
+<BR>Hint: display total number of modules with'LESSTHANSIXDAYS' as alias.
+answer:
+select count(modulename) from  MODULES where duration<6;
+
+
+9.Write a Query which will display the student ID, Student name, Batch code, place and phone number who are from CHENNAI.
+answer:
+ select * from students where place="CHENNAI";
+
+
+8.Write a query which will display the student id, student name, batch code, place and 
+phone number of the students who belongs to Batch '3001'.
+answer:
+select * from students where batchcode=3001;
+
+
+
+7.Write a query which will display the course title and fees which has the maximum fees.
+answer:
+select title,fees from courses where fees in(select max(fees)from courses);
+
+
+6."Write a query which will display all the course code and the number of modules present 
+in that particular course.
+answer:
+select  coursecode,count( coursecode) from courseandmodules group by coursecode;
+
+
+5."Write a query which will display the number of modules present in the course code 100. 
+answer:
+select count( coursecode) from courseandmodules where coursecode=100 group by coursecode;
+
+
+4.Write a query which displays the module names and course code for the course code 100.
+answer:
+select courseandmodules.coursecode,MODULES.modulename from courseandmodules join MODULES on MODULES.modulecode=courseandmodules.modulecode where coursecode=100;
+
+
+3.Write a query which displays all the module names of the course code 100.
+answer:
+select modulename from MODULES where MODULES.modulecode in (select courseandmodules.modulecode from courseandmodules where coursecode=100) ;
+
+
+2.Write a query which will display the BATCHCODE, TRAINERID, COURSECODE, STARTDATE, CAPACITY 
+and BATCHSTRENGTH of the batches handled by the trainer KRISHNAN.
+answer:
+select batches.batchcode,batches.trainerid,batches.coursecode,batches.startdate,batches.capacity,batches.batchstrength from trainers left join batches on trainers.trainerid=batches.trainerid where trainers.trainername="KRISHNAN";
+
+
+1.Write a query which displays the module code and the duration for modules whose duration is less than 6.
+answer:
+select modulecode,duration from MODULES where duration<6;
+
+
+
+
+
+
+
+
+MONGODB queries:-
+
+
+Queries:
+1)  to display all the documents in the collection.  
+2.   to display the fields _id, fname  for all the documents in the collection.
+3.  to display the all fields   but exclude the field id for all the documents in the collection.
+4    to display the first 5 Employees  
+5.  to display the next 5 Employees after skipping first 5  
+6.  to find the Employee who stay in Gurgaon city 
+7.  to find the Employee who jan salary is less than 20000
+8.  to find the Employee who jan salary is less than 20000 and who stay in Gurgaon city.
+9. to find the total salary of jan month for all the employee.
+10. count how any employee stay in Gurgaon city.
+
+
+
+answers:-
+use Mongotest;
+1.db.Employee.find().pretty();
+2.db.Employee.find({},{salary:0,_id:0,city:0}).pretty();
+3.db.Employee.find({},{id:0}).pretty();
+4.db.Employee.find().pretty().limit(5);
+5.db.Employee.find().pretty().skip(5).limit(5);
+6.db.Employee.find({"city":"gurgaon"})
+7.db.Employee.find({"salary.jan":{$lt:20000}},{_id:0,salary:0}).pretty()
+8.db.Employee.find({"salary.jan":{$lt:20000},city:"gurgaon"},{_id:0,salary:0}).pretty()
+9.db.Employee.aggregate([{$group:{_id:"salary.jan",Total:{$sum:"$salary.jan"}}}])
+10.db.Employee.find({"city":"gurgaon"}).count()
+
+
+
